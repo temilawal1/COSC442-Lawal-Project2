@@ -147,6 +147,14 @@ public class VendingMachineTest {
     }
 
     @Test
+    public void testMakePurchase_ExactFunds() throws VendingMachineException {
+        machine.addItem(item1, "A");
+        machine.insertMoney(1.50);
+
+        assertTrue(machine.makePurchase("A"));
+    }
+
+    @Test
     public void testMakePurchase_NotEnoughFunds() throws VendingMachineException {
         machine.addItem(item1, "A");
         machine.insertMoney(1.00);
