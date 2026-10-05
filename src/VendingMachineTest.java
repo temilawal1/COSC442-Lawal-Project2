@@ -68,17 +68,18 @@ public class VendingMachineTest {
     }
 
     @Test
-    public void testGetItem_EmptySlot() throws VendingMachineException {
-
-        assertEquals(null, machine.getItem("A"));
-    }
-
-    @Test
     public void testGetItem_InvalidCode() {
         assertThrows(VendingMachineException.class, () -> {
             machine.getItem("E");
         });
     }
+
+    @Test
+    public void testGetItem_EmptySlot() throws VendingMachineException {
+
+        assertEquals(null, machine.getItem("A"));
+    }
+
 
     @ParameterizedTest
     @ValueSource(strings = { "A", "B", "C", "D" })
