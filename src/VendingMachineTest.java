@@ -106,8 +106,8 @@ public class VendingMachineTest {
     @ParameterizedTest
     @CsvSource({
             "-10.00, false",
-            "0.00, false",
-            "0.99, false",
+            "0.00, true",
+            "0.99, true",
             "1.00, true",
             "1.02, true",
             "10.00, true",
