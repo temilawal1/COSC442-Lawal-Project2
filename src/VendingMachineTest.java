@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class VendingMachineTest {
@@ -101,26 +102,31 @@ public class VendingMachineTest {
         });
     }
 
-    @Test
-    public void testInsertMoney() throws VendingMachineException {
-        machine.insertMoney(10.00);
-        assertEquals(10.00, machine.getBalance()); // checks the balance of machine which should go up
-        // after money is inserted
-        // initial test passed
-        // also tests getBalance after money is inserted
-        // doesnt need to be another test? cause the code would just be the same
-    }
-
     @ParameterizedTest
-    @ValueSource(doubles = {-10.00, 0.0})
-    public void testInsertMoney_InvalidAmount(double funds) {
-        assertThrows(VendingMachineException.class, () -> {
+    @CsvSource({
+            "-10.00, false",
+            "0.00, false",
+            "0.99, false",
+            "1.00, true",
+            "1.02, true",
+            "10.00, true",
+    })
+    public void testInsertMoney(double funds, boolean accepted) throws VendingMachineException {
+        if (accepted) {
             machine.insertMoney(funds);
-        });
-        // initial test passed
-        // changed to parameterized test to check negatives and zero value
-        // test passed
-    }
+            assertEquals(funds, machine.getBalance()); // checks the balance of machine which should go up
+        } else {
+            assertThrows(VendingMachineException.class, () -> {
+                machine.insertMoney(funds);
+            });
+        } // after money is inserted
+          // initial test passed
+          // also tests getBalance after money is inserted
+          // doesnt need to be another test? cause the code would just be the same
+    } // changed testInsertMoney to parameterized test to add boundaries
+    // test passed
+
+    
 
     @Test
     public void testGetBalance() {
@@ -157,11 +163,10 @@ public class VendingMachineTest {
         // initial test passed
     }
 
-
     @Test
     public void testReturnChange() throws VendingMachineException {
         machine.insertMoney(5.00); // add initial monayz
-        
+
         assertEquals(5.00, machine.returnChange());
         assertEquals(0.00, machine.getBalance()); // balance should be 0 cause all change is returned?
         // intiial test passed yay
